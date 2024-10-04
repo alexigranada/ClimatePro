@@ -1,0 +1,72 @@
+.weather-layers-panel {
+    position: absolute;
+    background-color: #f3f4f6;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+  
+  .panel-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .layers-container,
+  .points-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .layer-button-container {
+    margin-bottom: 8px;
+  }
+  
+  .layer-button,
+  .point-button,
+  .grid-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .layer-button.active,
+  .point-button.active,
+  .grid-button.active {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .button-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .grid-option {
+    margin-left: 16px;
+    margin-top: 8px;
+  }
+  
+  .grid-button {
+    background-color: #e5e7eb;
+  }
+  
+  .grid-button.active {
+    background-color: #10b981;
+  }
+  
+  /* Estilos para los iconos de Lucide */
+  .button-content svg {
+    width: 20px;
+    height: 20px;
+  }
