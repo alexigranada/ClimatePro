@@ -273,6 +273,7 @@
 
 .time-button:hover {
   background-color: #303040;
+  color: #f9f9f9;
 }
 
 .current-time {
@@ -283,4 +284,39 @@
   color: #303040;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.download-button {
+  background-color: #303040;
+  color: #f9f9f9;
+  border-radius: 3px;
+}
+
+.download {
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
+.download p {
+  margin: 0;
+}
+
+.download-button:hover {
+  background-color: #ffffff;
+  color: #303040;
+}
+
+/*PUNTOS DE ESTACIONES*/
+.marker {
+  cursor: pointer;
+}
+
+.maplibregl-popup {
+  max-width: 200px;
+}
+
+.maplibregl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
 }

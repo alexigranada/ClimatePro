@@ -4,11 +4,22 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css';
 import NavBar from './NavBar';
 
+//Puntos de las estaciones
+const puntos = [
+  { nombre: "Unipacifico", coordenadas: [-76.9869, 3.8480] },
+  { nombre: "La Cumbre", coordenadas: [-76.5647, 3.6451] },
+  { nombre: "Farallones", coordenadas: [-76.6513, 3.4158] },
+  { nombre: "La Diana", coordenadas: [-76.1855, 3.3138] },
+  { nombre: "Siloe", coordenadas: [-76.5605, 3.4252] },
+  { nombre: "Univalle", coordenadas: [-76.5338, 3.3777] },
+  { nombre: "Aeropuerto", coordenadas: [-76.3822, 3.5327] }
+];
+
 // Define fixed scales and ranges for temperature and precipitation
 const SCALES = {
   temperature: {
-    min: 291, // 0°C in Kelvin 273.15
-    max: 299, // 40°C in Kelvin - 5 313.15
+    min: 7, // 0°C in Kelvin 273.15
+    max: 28, // 40°C in Kelvin - 5 313.15
     colorScale: [[0, 0, 255], [0, 255, 255], [0, 255, 0], [255, 255, 0], [255, 0, 0]]
   },
   precipitation: {
@@ -20,14 +31,14 @@ const SCALES = {
 
 const DATA_SOURCES = {
     temperature: [
-      { id: 'temp1', name: 'T SSP 1.19', endpoint: 'http://localhost:8000/api/temperature/' },
-      { id: 'temp2', name: 'T SSP 2.45', endpoint: 'http://localhost:8000/api/temperature/?file=ssp245' },
-      { id: 'temp3', name: 'T SSP 3.70', endpoint: 'http://localhost:8000/api/temperature/?file=ssp370' },
+      { id: 'temp1', name: 'Temperatura SSP 1.19', endpoint: 'http://localhost:8000/api/temperature/' },
+      { id: 'temp2', name: 'Temperatura SSP 2.45', endpoint: 'http://localhost:8000/api/temperature/?file=ssp245' },
+      { id: 'temp3', name: 'Temperatura SSP 3.70', endpoint: 'http://localhost:8000/api/temperature/?file=ssp370' },
     ],
     precipitation: [
-      { id: 'precip1', name: 'P SSP 1.19', endpoint: 'http://localhost:8000/api/precipitation' },
-      { id: 'precip2', name: 'P SSP 2.45', endpoint: 'http://localhost:8000/api/precipitation/?file=ssp245' },
-      { id: 'precip3', name: 'P SSP 3.70', endpoint: 'http://localhost:8000/api/precipitation/?file=ssp370' },
+      { id: 'precip1', name: 'Precipitación SSP 1.19', endpoint: 'http://localhost:8000/api/precipitation' },
+      { id: 'precip2', name: 'Precipitación SSP 2.45', endpoint: 'http://localhost:8000/api/precipitation/?file=ssp245' },
+      { id: 'precip3', name: 'Precipitación SSP 3.70', endpoint: 'http://localhost:8000/api/precipitation/?file=ssp370' },
     ]
   };
 
@@ -84,9 +95,9 @@ const generateOverlay = (data, valueKey) => {
 export default function Map() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng] = useState(-77.36);
+  const [lng] = useState(-77.28);
   const [lat] = useState(3.65);
-  const [zoom] = useState(9.5);
+  const [zoom] = useState(8.94);
   const [error, setError] = useState(null);
   const [activeLayer, setActiveLayer] = useState('temperature');
   const [canvasData, setCanvasData] = useState(null);
@@ -142,6 +153,64 @@ export default function Map() {
     } catch (err) {
       setError(`Error initializing map: ${err.message}`);
     }
+
+    /**GEOJSON VALLE */
+    map.current.on('load', () => {
+      map.current.addSource('Valle-geojson', {
+        type: 'geojson',
+        data: 'Data/Valle_Cauca_4326.geojson' // O un objeto GeoJSON inline
+      });
+  
+      map.current.addLayer({
+        id: 'miValle-geojson',
+        type: 'line', //fill O 'line', 'circle', etc., dependiendo de tu GeoJSON
+        source: 'Valle-geojson',
+        paint: {
+          'line-color': '#606060',
+          'line-width': 1.5
+        }
+      });
+    });
+
+    /**GEOJSON Dagua */
+    map.current.on('load', () => {
+      map.current.addSource('Dagua-geojson', {
+        type: 'geojson',
+        data: 'Data/Cuenca_Dagua_4326.geojson' // O un objeto GeoJSON inline
+      });
+  
+      map.current.addLayer({
+        id: 'miDagua-geojson',
+        type: 'line', //fill O 'line', 'circle', etc., dependiendo de tu GeoJSON
+        source: 'Dagua-geojson',
+        paint: {
+          'line-color': '#404040',
+          'line-width': 1
+        }
+      });
+    });
+    /**AÑADIR CAPA DE PUNTOS */
+    // Añadir los puntos al mapa
+    puntos.forEach((punto) => {
+      // Crear un elemento div para el marcador
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.style.backgroundColor = 'red';
+      el.style.width = '10px';
+      el.style.height = '10px';
+      el.style.borderRadius = '50%';
+
+      // Crear el popup
+      const popup = new maplibregl.Popup({ offset: 25 })
+        .setText(punto.nombre);
+
+      // Crear y añadir el marcador
+      new maplibregl.Marker(el)
+        .setLngLat(punto.coordenadas)
+        .setPopup(popup) // Establecer el popup
+        .addTo(map.current);
+    });
+
   }, [API_KEY, lng, lat, zoom]);
 
   useEffect(() => {
@@ -328,7 +397,7 @@ export default function Map() {
     }).join(', ');
   
     legendContainer.innerHTML = `
-      <h4>${dataType === 'temperature' ? '°K' : 'mm'}</h4>
+      <h4>${dataType === 'temperature' ? '°C' : 'mm'}</h4>
       <div class="legend-gradient" style="background: linear-gradient(to top, ${gradientColors});">  
         <div class="legend-labels">
           <span>${max.toFixed(1)}</span>
@@ -338,6 +407,7 @@ export default function Map() {
       </div>
     `;
   };
+  /**AÑADIENDO GEOJSON */
 
   /**FUNCIÓN CAMBIO DE HORA */
   const changeTime = useCallback((direction) => {
@@ -440,7 +510,12 @@ export default function Map() {
               ))}
             </div>
             <p>Proyección desde 2024 a 2035</p>
-            <button onClick={handleDownload}>Descargar archivo</button>
+            <button className='download-button' onClick={handleDownload}>
+              <div className='download'>
+              <p>Descargar archivo</p>
+              <span className="material-symbols-outlined">download</span>
+              </div>
+            </button>
           </div>
         )}
       </div>
@@ -450,7 +525,7 @@ export default function Map() {
   // Función para formatear la fecha
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const options = { weekday: 'short', day: 'numeric', month: 'numeric' };
+    const options = { weekday: 'long', day: 'numeric', month: 'short' };
     const dateFormatted = date.toLocaleDateString('es-ES', options).toLowerCase();
     const timeFormatted = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     return `${dateFormatted} ${timeFormatted}`;

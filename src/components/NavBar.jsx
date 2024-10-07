@@ -2,7 +2,7 @@ import './NavBar.css'
 
 function NavBar() {
     return(
-        <div class="navbar">
+        <div className="navbar">
             <p>
                 <a>ClimatePro</a>
                 <a>descripción</a>
