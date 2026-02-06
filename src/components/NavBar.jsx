@@ -1,12 +1,13 @@
 import './NavBar.css'
+import { NavLink } from "react-router-dom"
 
 function NavBar() {
     return(
         <div className="navbar">
             <p>
-                <a>ClimatePro</a>
-                <a>descripción</a>
-                <a>API</a>
+                <NavLink to="/">ClimatePro</NavLink>
+                <NavLink to="descripcion">descripción</NavLink>
+                <NavLink to="api">API</NavLink> 
             </p>
 
             <div>

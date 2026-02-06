@@ -4,6 +4,9 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import './map.css';
 import NavBar from './NavBar';
 
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import DescripcionPage from '../paginas/descripcion';
+
 //Puntos de las estaciones
 const puntos = [
   { nombre: "Unipacifico", coordenadas: [-76.9869, 3.8480] },
@@ -24,21 +27,21 @@ const SCALES = {
   },
   precipitation: {
     min: 0,
-    max: 0.0001, // 100mm as maximum precipitation
+    max: 1, // 100mm as maximum precipitation
     colorScale: [[255, 255, 255], [0, 255, 255], [0, 0, 255], [128, 0, 255], [255, 0, 255]]
   }
 };
 
 const DATA_SOURCES = {
     temperature: [
-      { id: 'temp1', name: 'Temperatura SSP 1.19', endpoint: 'http://localhost:8000/api/temperature/' },
-      { id: 'temp2', name: 'Temperatura SSP 2.45', endpoint: 'http://localhost:8000/api/temperature/?file=ssp245' },
-      { id: 'temp3', name: 'Temperatura SSP 3.70', endpoint: 'http://localhost:8000/api/temperature/?file=ssp370' },
+      { id: 'temp1', name: 'Temperatura SSP 1.19', endpoint: 'https://www.agranada.online/api/temperature/' },
+      { id: 'temp2', name: 'Temperatura SSP 2.45', endpoint: 'https://www.agranada.online/api/temperature/?file=ssp245' },
+      { id: 'temp3', name: 'Temperatura SSP 3.70', endpoint: 'https://www.agranada.online/api/temperature/?file=ssp370' },
     ],
     precipitation: [
-      { id: 'precip1', name: 'Precipitación SSP 1.19', endpoint: 'http://localhost:8000/api/precipitation' },
-      { id: 'precip2', name: 'Precipitación SSP 2.45', endpoint: 'http://localhost:8000/api/precipitation/?file=ssp245' },
-      { id: 'precip3', name: 'Precipitación SSP 3.70', endpoint: 'http://localhost:8000/api/precipitation/?file=ssp370' },
+      { id: 'precip1', name: 'Precipitación SSP 1.19', endpoint: 'https://www.agranada.online/api/precipitation' },
+      { id: 'precip2', name: 'Precipitación SSP 2.45', endpoint: 'https://www.agranada.online/api/precipitation/?file=ssp245' },
+      { id: 'precip3', name: 'Precipitación SSP 3.70', endpoint: 'https://www.agranada.online/api/precipitation/?file=ssp370' },
     ]
   };
 
@@ -158,7 +161,7 @@ export default function Map() {
     map.current.on('load', () => {
       map.current.addSource('Valle-geojson', {
         type: 'geojson',
-        data: 'Data/Valle_Cauca_4326.geojson' // O un objeto GeoJSON inline
+        data: '/ClimatePro/Data/Valle_Cauca_4326.geojson' // O un objeto GeoJSON inline
       });
   
       map.current.addLayer({
@@ -176,7 +179,7 @@ export default function Map() {
     map.current.on('load', () => {
       map.current.addSource('Dagua-geojson', {
         type: 'geojson',
-        data: 'Data/Cuenca_Dagua_4326.geojson' // O un objeto GeoJSON inline
+        data: '/ClimatePro/Data/Cuenca_Dagua_4326.geojson' // O un objeto GeoJSON inline
       });
   
       map.current.addLayer({
@@ -532,14 +535,21 @@ export default function Map() {
   };
 
 
-  return (
+  /*return (
     <div className="map-container">
       <div className="map-wrap">
         <div ref={mapContainer} className="map" />
-        <NavBar></NavBar>
+        <BrowserRouter basename="/ClimatePro">
+          <NavBar></NavBar>
+          <Routes>
+            <Route path='/'/>
+            <Route path='/descripcion' element={<DescripcionPage/>}/>
+            <Route/>
+          </Routes>
+        </BrowserRouter>
         <div id="legend" className="legend vertical"></div>
 
-        {/**SIDEBAR */}
+        {/**SIDEBAR 
         <div className='side-bar'> 
         <div className='control-panel'>
           <h5>CONTROL DE PROYECCIONES CLIMÁTICAS</h5>
@@ -571,5 +581,45 @@ export default function Map() {
         </div>
       </div>
     </div>
-  );
+  );*/
+
+  return (
+  <div className="map-container">
+    <div className="map-wrap">
+      <div ref={mapContainer} className="map" />
+      <div id="legend" className="legend vertical"></div>
+
+      {/* SIDEBAR */}
+      <div className='side-bar'> 
+        <div className='control-panel'>
+          <h5>CONTROL DE PROYECCIONES CLIMÁTICAS</h5>
+          <div className='panel-variable'>
+            <LayerControl type="temperature" icon="thermostat" label="Temperatura" />
+            <LayerControl type="precipitation" icon="rainy" label="Precipitación" />
+          </div>
+          <div className="value-grid-toggle">
+            <label>
+              <input
+                type="checkbox"
+                checked={showValueGrid}
+                onChange={() => setShowValueGrid(!showValueGrid)}
+              />
+              Cuadrícula de valores
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div className="controls">
+        <div className="time-controls">
+          <button className="time-button" onClick={() => changeTime('backward')}>-1h</button>
+          <div className="current-time">
+            <span>{formatDateTime(currentTime)}</span>
+          </div>
+          <button className="time-button" onClick={() => changeTime('forward')}>+1h</button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 }

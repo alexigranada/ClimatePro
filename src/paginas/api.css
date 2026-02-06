@@ -1,0 +1,87 @@
+.api_page {
+  min-height: 100vh;
+  background-color: #fafafa;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+.api_header {
+  max-width: 900px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.api_content h1 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.api_content p {
+  color: #555;
+  font-size: 0.8rem;
+}
+
+.api_content {
+  max-width: 900px;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.api_content h2 {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.api_table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.api_table th,
+.api_table td {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  text-align: left;
+}
+
+.api_table th {
+  background-color: #f3f4f6;
+}
+
+.lista li {
+  list-style-type: none;
+}
+
+.api_params {
+  padding-left: 20px;
+}
+
+.api_code {
+  background-color: #0f172a;
+  color: #e5e7eb;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.api_link {
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+.api_link:hover {
+  text-decoration: underline;
+}

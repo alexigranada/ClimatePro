@@ -1,5 +1,5 @@
 .map-wrap {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: calc(100vh - 0px); /* calculate height of the screen minus theheading */
 }
@@ -41,7 +41,7 @@
 }
 
 .legend.vertical {
-  bottom: 30px;
+  bottom: 25px;
   left: 10px;
   display: flex;
   flex-direction: column;
@@ -55,7 +55,7 @@
 
 .legend-gradient {
   width: 30px;
-  height: 300px; /* Ajusta según tus necesidades */
+  height: 200px; /* Ajusta según tus necesidades */
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
@@ -64,7 +64,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px; /* Debe coincidir con la altura del gradiente */
+  height: 200px; /* Debe coincidir con la altura del gradiente */
 }
 
 .legend-labels span {
@@ -227,7 +227,7 @@
 }
 
 .layer-button:hover {
-  background-color: #e0e0e0;
+  background-color: #e0e0e0;  
   border-radius: 0px;
 }
 
